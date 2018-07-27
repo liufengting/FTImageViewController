@@ -1,0 +1,10 @@
+platform :ios, '8.0'
+
+target 'Demo' do
+
+  use_frameworks!
+
+pod 'FTZoomTransition'
+pod 'Kingfisher', '~> 4.0'
+
+end
