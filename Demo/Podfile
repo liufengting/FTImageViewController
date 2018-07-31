@@ -4,7 +4,6 @@ target 'Demo' do
 
   use_frameworks!
 
-pod 'FTZoomTransition'
-pod 'Kingfisher', '~> 4.0'
+pod 'FTImageViewController', :path => '../'
 
 end

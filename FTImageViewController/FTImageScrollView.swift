@@ -39,7 +39,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     
     open lazy var activityIndicator: UIActivityIndicatorView = {
         let ai = UIActivityIndicatorView(frame: CGRect(x: frame.width/2.0, y: frame.height/2.0, width: 40.0, height: 40.0))
-        ai.style = .white
+        ai.activityIndicatorViewStyle = .white
         ai.hidesWhenStopped = true
         return ai
     }()
@@ -80,7 +80,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.backgroundColor = UIColor.clear
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
-        self.decelerationRate = .fast
+        self.decelerationRate = UIScrollViewDecelerationRateFast
         self.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         self.minimumZoomScale = 1.0
         self.maximumZoomScale = 3.0
@@ -100,7 +100,6 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     public override func setNeedsLayout() {
         super.setNeedsLayout()
         self.activityIndicator.frame = CGRect(x: frame.width/2.0, y: frame.height/2.0, width: 40.0, height: 40.0);
-        
     }
     
     public func setupWithImageResource(imageResource : FTImageResource) {
@@ -115,6 +114,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         if let img : UIImage = imageResource.image {
             imageView.image = img
             activityIndicator.stopAnimating()
+            self.updateFrameWithImage(image: img)
         }else if let imageURL : String = imageResource.imageURLString {
             imageView.kf.setImage(with: URL(string: imageURL)!,
                                   placeholder: nil,
@@ -125,16 +125,26 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
                 if image != nil && error == nil {
                     self.activityIndicator.stopAnimating()
                 }
+                self.updateFrameWithImage(image: image)
             }
         }
     }
+    
+    func updateFrameWithImage(image: UIImage?) {
+        if let im = image {
+            let rect = im.rectWithScreenWidth()
+            self.imageView.frame = rect
+            self.contentSize = CGSize(width: UIScreen.width(), height: max(rect.height, UIScreen.height()))
+        }
+    }
+    
     
     //MARK: - UIScrollViewDelegate
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView?{
         return imageView
     }
-    
+        
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat){
         let ws = scrollView.frame.size.width - scrollView.contentInset.left - scrollView.contentInset.right
         let hs = scrollView.frame.size.height - scrollView.contentInset.top - scrollView.contentInset.bottom
@@ -162,5 +172,5 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
             self.zoom(to: CGRect(x: touchPoint.x, y: touchPoint.y, width: 1, height: 1), animated: true)
         }
     }
-
+    
 }

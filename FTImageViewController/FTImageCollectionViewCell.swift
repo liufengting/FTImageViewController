@@ -8,18 +8,6 @@
 
 import UIKit
 
-extension UIScreen {
-    
-    public static func width() -> CGFloat {
-        return UIScreen.main.bounds.width
-    }
-    
-    public static func height() -> CGFloat {
-        return UIScreen.main.bounds.height
-    }
-    
-}
-
 class FTImageCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "\(FTImageCollectionViewCell.classForCoder())"
@@ -39,5 +27,22 @@ class FTImageCollectionViewCell: UICollectionViewCell {
         }
         self.imageScrollView.setupWithImageResource(imageResource: imageResource)
     }
+    
+//    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//        if self.imageScrollView.contentSize.height > self.imageScrollView.bounds.size.height {
+//            return self.imageScrollView
+//        } else {
+//            return self
+//        }
+//    }
+    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        if self.imageScrollView.contentSize.height > self.imageScrollView.bounds.size.height {
+//            self.imageScrollView.touchesBegan(touches, with: event)
+//        } else {
+//            super.touchesBegan(touches, with: event)
+//        }
+//    }
+//    
     
 }

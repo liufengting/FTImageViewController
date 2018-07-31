@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FTImageViewController
 
 class ImageViewViewController: FTImageViewController {
 
@@ -15,6 +16,8 @@ class ImageViewViewController: FTImageViewController {
 
         
     }
+    
+    
 
 
 }

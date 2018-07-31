@@ -11,6 +11,8 @@
 		2A26FFE6210AE99200E7400C /* FTImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A26FFE5210AE99200E7400C /* FTImageViewController.swift */; };
 		2A26FFE8210AF09800E7400C /* FTImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A26FFE7210AF09800E7400C /* FTImageScrollView.swift */; };
 		2A26FFEB210AF1CC00E7400C /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A26FFEA210AF1CC00E7400C /* Kingfisher.framework */; };
+		2A46CBB8210ECFB300781D37 /* FTImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A46CBB6210ECFB300781D37 /* FTImageCollectionViewCell.swift */; };
+		2A46CBB9210ECFB300781D37 /* FTExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A46CBB7210ECFB300781D37 /* FTExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		2A26FFE5210AE99200E7400C /* FTImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTImageViewController.swift; sourceTree = "<group>"; };
 		2A26FFE7210AF09800E7400C /* FTImageScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FTImageScrollView.swift; sourceTree = "<group>"; };
 		2A26FFEA210AF1CC00E7400C /* Kingfisher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Kingfisher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A46CBB6210ECFB300781D37 /* FTImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FTImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		2A46CBB7210ECFB300781D37 /* FTExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FTExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +59,9 @@
 			isa = PBXGroup;
 			children = (
 				2A26FFD3210AC85900E7400C /* FTImageViewController.h */,
+				2A46CBB7210ECFB300781D37 /* FTExtensions.swift */,
 				2A26FFE7210AF09800E7400C /* FTImageScrollView.swift */,
+				2A46CBB6210ECFB300781D37 /* FTImageCollectionViewCell.swift */,
 				2A26FFE5210AE99200E7400C /* FTImageViewController.swift */,
 				2A26FFD4210AC85900E7400C /* Info.plist */,
 			);
@@ -150,6 +156,8 @@
 			files = (
 				2A26FFE6210AE99200E7400C /* FTImageViewController.swift in Sources */,
 				2A26FFE8210AF09800E7400C /* FTImageScrollView.swift in Sources */,
+				2A46CBB8210ECFB300781D37 /* FTImageCollectionViewCell.swift in Sources */,
+				2A46CBB9210ECFB300781D37 /* FTExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,34 @@
+{
+  "name": "FTImageViewController",
+  "version": "0.0.1",
+  "summary": "A short summary of FTImageViewController.",
+  "description": "A short description of FTImageViewController.",
+  "homepage": "https://github.com/liufengting/FTImageViewController",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "liufengting": "wo157121900@me.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source": {
+    "git": "https://github.com/liufengting/FTImageViewController.git",
+    "tag": "0.0.1"
+  },
+  "source_files": [
+    "FTImageViewController",
+    "FTImageViewController/*.{h,m,swift}"
+  ],
+  "dependencies": {
+    "Kingfisher": [
+      "~> 4.0"
+    ],
+    "FTZoomTransition": [
+      "~> 0.2.0"
+    ]
+  },
+  "swift_version": "4.0"
+}

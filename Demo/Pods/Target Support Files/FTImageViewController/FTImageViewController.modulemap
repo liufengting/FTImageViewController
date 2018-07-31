@@ -1,0 +1,6 @@
+framework module FTImageViewController {
+  umbrella header "FTImageViewController-umbrella.h"
+
+  export *
+  module * { export * }
+}

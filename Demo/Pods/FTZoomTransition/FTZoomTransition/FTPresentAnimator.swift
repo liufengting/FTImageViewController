@@ -8,12 +8,12 @@
 
 import UIKit
 
-public class FTPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning{
+open class FTPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     
-    public var config : FTZoomTransitionConfig!
+    open var config : FTZoomTransitionConfig!
     
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval{
-        return max(0.3, config.presentAnimationDuriation)
+        return max(FTZoomTransitionConfig.maxAnimationDuriation(), config.presentAnimationDuriation)
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -31,10 +31,9 @@ public class FTPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning{
         container.addSubview(fromVC.view)
         container.addSubview(toVC.view)
         
-        self.config.sourceSnapView.frame = config.sourceFrame
-        container.addSubview(config.sourceSnapView)
-        self.config.sourceView.isHidden = true
-        self.config.targetView.isHidden = true
+        self.config.transitionImageView.frame = config.sourceFrame
+        container.addSubview(config.transitionImageView)
+        self.config.sourceView?.isHidden = true
         toVC.view.alpha = 0
         
         let zoomScale : CGFloat = self.config.targetFrame.size.width/self.config.sourceFrame.size.width
@@ -55,21 +54,21 @@ public class FTPresentAnimator: NSObject, UIViewControllerAnimatedTransitioning{
                                 options: keyframeAnimationOption,
                                 animations: {
                                     UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0, animations: {
-                                        self.config.sourceSnapView.frame = self.config.targetFrame
+                                        self.config.transitionImageView.frame = self.config.targetFrame
                                         fromVC.view.alpha = 0
                                     })
-                                    
                                     if self.config.enableZoom == true {
                                         UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1, animations: {
                                             fromVC.view.layer.transform = CATransform3DMakeScale(zoomScale, zoomScale, 1)
                                         })
                                     }
-                                    UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.2, animations: {
+                                    UIView.addKeyframe(withRelativeStartTime: 0.99, relativeDuration: 0.01, animations: {
                                         toVC.view.alpha = 1
                                     })
         }, completion: { (completed) -> () in
-            self.config.targetView.isHidden = false
-            self.config.sourceSnapView.isHidden = true
+            fromVC.view.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
+            self.config.transitionImageView.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
+            self.config.transitionImageView.isHidden = true
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         })
     }
