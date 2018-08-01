@@ -20,8 +20,10 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/liufengting/FTImageViewController.git", :tag => "#{s.version}" }
   s.source_files  = "FTImageViewController", "FTImageViewController/*.{h,m,swift}"
+
   s.dependency "Kingfisher", "~> 4.0"
-  s.dependency "FTZoomTransition", "~> 0.2.0"
+  s.dependency "FTZoomTransition", "~> 0.2.1"
+  
   s.swift_version = '4.0'
 
 end

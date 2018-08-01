@@ -15,7 +15,7 @@ public protocol FTImageViewControllerDelegate {
 
 }
 
-open class FTImageViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FTImageScrollViewDelegate {
+open class FTImageViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FTImageScrollViewDelegate , FTPanDismissAnimatorDelegate{
 
     var imageResources: [FTImageResource] = []
     var currentIndex: NSInteger = 0
@@ -48,6 +48,10 @@ open class FTImageViewController: UIViewController, UICollectionViewDataSource, 
         if self.currentIndex != 0 {
             self.scrollToPage(page: self.currentIndex, animated: false)
         }
+        
+        if let transDelegate: FTZoomTransition = self.transitioningDelegate as? FTZoomTransition {
+            transDelegate.panDismissAnimator.wireToViewController(self, delegate: self)
+        }
     }
     
     open override func viewDidLayoutSubviews() {
@@ -70,13 +74,7 @@ open class FTImageViewController: UIViewController, UICollectionViewDataSource, 
     }
     
     public func ftImageViewController(ftImageViewController: FTImageViewController, didScrollToPage page: NSInteger) {
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
-//            if let transDelegate: FTZoomTransition = self.transitioningDelegate as? FTZoomTransition {
-//                if let cell : FTImageCollectionViewCell = self.collectionView.cellForItem(at: IndexPath(item: page, section: 0)) as? FTImageCollectionViewCell {
-//                    transDelegate.wirePanDismissToViewController(self, for: cell.imageScrollView)
-//                }
-//            }
-//        }
+
     }
     
     // MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
@@ -106,7 +104,14 @@ open class FTImageViewController: UIViewController, UICollectionViewDataSource, 
             for: indexPath) as! FTImageCollectionViewCell
         cell.setupWithImageResource(imageResource: self.imageResources[indexPath.item])
         cell.imageScrollView.tapDelegate = self
+        cell.panGesture.addTarget(self, action: #selector(handlePanGesture(gesture:)))
         return cell
+    }
+    
+    @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
+        if let transDelegate: FTZoomTransition = self.transitioningDelegate as? FTZoomTransition {
+            transDelegate.panDismissAnimator.handlePanGesture(gesture)
+        }
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -123,6 +128,17 @@ open class FTImageViewController: UIViewController, UICollectionViewDataSource, 
         self.currentIndex = NSInteger(scrollView.contentOffset.x / scrollView.bounds.size.width)
         self.ftImageViewController(ftImageViewController: self, didScrollToPage: self.currentIndex)
     }
+    
+    
+    public func viewControllerWillDismiss(viewController: UIViewController) {
+        if let cell : FTImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: self.currentIndex, section: 0)) as? FTImageCollectionViewCell {
+            if let transDelegate: FTZoomTransition = self.transitioningDelegate as? FTZoomTransition {
+                transDelegate.config.targetFrame = cell.imageScrollView.imageView.frame
+                transDelegate.config.transitionImageView.image = cell.imageScrollView.imageView.image
+            }
+        }
+    }
+    
 }
 
 extension FTImageViewController {

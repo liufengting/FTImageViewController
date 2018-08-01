@@ -104,12 +104,12 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                                             image: sender.contentImageView.image,
                                             targetFrame: targetRect)
         ftZoomTransition.config = config
-        ftZoomTransition.wirePanDismissToViewController(detial, for: detial.collectionView)
+//        ftZoomTransition.wirePanDismissToViewController(detial, for: detial.collectionView)
         detial.transitioningDelegate = ftZoomTransition
         self.present(detial, animated: true, completion: {
 
         })
-//
+
     }
 
 }

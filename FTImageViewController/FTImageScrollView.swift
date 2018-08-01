@@ -24,13 +24,15 @@ public struct FTImageResource : FTImageResourceProtocol {
     }
 }
 
-public protocol FTImageScrollViewDelegate {
+@objc public protocol FTImageScrollViewDelegate: NSObjectProtocol {
     func ftImageScrollView(ftImageScrollView: FTImageScrollView, didRecognizeSingleTapGesture gesture: UITapGestureRecognizer)
+    @objc optional func ftImageScrollViewDidZoomOut(ftImageScrollView: FTImageScrollView)
+    @objc optional func ftImageScrollViewDidZoomIn(ftImageScrollView: FTImageScrollView)
 }
 
 public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
 
-    open var tapDelegate: FTImageScrollViewDelegate?
+    open weak var tapDelegate: FTImageScrollViewDelegate?
     open lazy var imageView: UIImageView = {
         let iv = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         iv.contentMode = UIView.ContentMode.scaleAspectFit
@@ -78,6 +80,11 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     
     fileprivate func commonSetup() {
         self.backgroundColor = UIColor.clear
+        if #available(iOS 11.0, *) {
+            self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.never
+        } else {
+
+        }
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
         self.decelerationRate = UIScrollViewDecelerationRateFast
@@ -90,11 +97,9 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     }
     
     fileprivate func setupGestures() {
-        //gesture
         singleTapGesture.require(toFail: doubleTapGesture)
         self.addGestureRecognizer(singleTapGesture)
         self.addGestureRecognizer(doubleTapGesture)
-//        self.addGestureRecognizer(panGesture)
     }
     
     public override func setNeedsLayout() {
@@ -139,7 +144,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     }
     
     
-    //MARK: - UIScrollViewDelegate
+    //    MARK: - UIScrollViewDelegate
     
     public func viewForZooming(in scrollView: UIScrollView) -> UIView?{
         return imageView
@@ -154,22 +159,29 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         rct.origin.x = (ws > w) ? (ws-w)/2 : 0
         rct.origin.y = (hs > h) ? (hs-h)/2 : 0
         imageView.frame = rct;
+        print(rct)
     }
     
-    //MARK: - handleSingleTap
+    //    MARK: - handleSingleTap
     
     @objc func handleSingleTap(sender: UITapGestureRecognizer){
         self.tapDelegate?.ftImageScrollView(ftImageScrollView: self, didRecognizeSingleTapGesture: sender)
     }
     
-    //MARK: - handleDoubleTap
+    //    MARK: - handleDoubleTap
     
     @objc func handleDoubleTap(sender: UITapGestureRecognizer){
         let touchPoint = sender.location(in: self)
         if (self.zoomScale == self.maximumZoomScale){
             self.setZoomScale(self.minimumZoomScale, animated: true)
+            if (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(ftImageScrollView:))))! {
+                self.tapDelegate?.ftImageScrollViewDidZoomIn!(ftImageScrollView: self)
+            }
         }else{
             self.zoom(to: CGRect(x: touchPoint.x, y: touchPoint.y, width: 1, height: 1), animated: true)
+            if (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(ftImageScrollView:))))! {
+                self.tapDelegate?.ftImageScrollViewDidZoomOut!(ftImageScrollView: self)
+            }
         }
     }
     

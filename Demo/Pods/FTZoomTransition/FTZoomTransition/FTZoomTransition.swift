@@ -36,6 +36,7 @@ open class FTZoomTransitionConfig {
             self.sourceFrame = (self.sourceView?.superview?.convert((self.sourceView?.frame)!, to: UIApplication.shared.keyWindow))!;
         }
     }
+    
 }
 
 open class FTZoomTransition: NSObject, UIViewControllerTransitioningDelegate {
@@ -46,10 +47,9 @@ open class FTZoomTransition: NSObject, UIViewControllerTransitioningDelegate {
             dismissAnimator.config = newValue
         }
     }
-    
-    final let presentAnimator = FTPresentAnimator()
-    final let dismissAnimator = FTDismissAnimator()
-    final let panDismissAnimator = FTPanDismissAnimator()
+    private let presentAnimator = FTPresentAnimator()
+    private let dismissAnimator = FTDismissAnimator()
+    public var panDismissAnimator = FTPanDismissAnimator()
     
     public func wirePanDismissToViewController(_ viewController: UIViewController!, for view: UIView) {
         self.panDismissAnimator.wireToViewController(viewController, for: view)
@@ -71,13 +71,14 @@ open class FTZoomTransition: NSObject, UIViewControllerTransitioningDelegate {
             return nil
         }
     }
+    
 }
 
 public extension UIView {
     
     // solution found at: http://stackoverflow.com/a/5666430/6310268
     
-    func setAnchorPoint(anchorPoint: CGPoint) {
+    public func setAnchorPoint(anchorPoint: CGPoint) {
         var newPoint = CGPoint(x: self.bounds.size.width * anchorPoint.x, y: self.bounds.size.height * anchorPoint.y)
         var oldPoint = CGPoint(x: self.bounds.size.width * self.layer.anchorPoint.x, y: self.bounds.size.height * self.layer.anchorPoint.y)
         
@@ -94,4 +95,5 @@ public extension UIView {
         self.layer.position = position
         self.layer.anchorPoint = anchorPoint
     }
+    
 }

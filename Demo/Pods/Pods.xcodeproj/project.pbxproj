@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -97,12 +97,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0120F3D1BE3769F862DB6A8351B82A5D /* Kingfisher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kingfisher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0120F3D1BE3769F862DB6A8351B82A5D /* Kingfisher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Kingfisher.framework; path = Kingfisher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0479228ADA5C1B3C2A2A2FD6E89327AB /* FTZoomTransition-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FTZoomTransition-umbrella.h"; sourceTree = "<group>"; };
 		0E725131F50E61C00C67EC50B6B6CF5D /* String+MD5.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+MD5.swift"; path = "Sources/String+MD5.swift"; sourceTree = "<group>"; };
 		11D33B98725D79F13B82E7AA184DEC3B /* FTImageViewController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FTImageViewController-prefix.pch"; sourceTree = "<group>"; };
 		1297CC1D72EFE436360CFBB898F8CB2E /* Pods-Demo-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Demo-dummy.m"; sourceTree = "<group>"; };
-		12A5858F3D3629CC52A5942BAA9403B1 /* FTImageViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FTImageViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		12A5858F3D3629CC52A5942BAA9403B1 /* FTImageViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FTImageViewController.framework; path = FTImageViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1896CE9ABDD0FA44E6604671C2D1CC2A /* ImageDownloader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDownloader.swift; path = Sources/ImageDownloader.swift; sourceTree = "<group>"; };
 		1965FF76BB91163730C384D7B1E2C4FB /* Pods-Demo-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Demo-frameworks.sh"; sourceTree = "<group>"; };
 		1C840B47D39C919F77F97874F04E0A88 /* FTZoomTransition-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FTZoomTransition-dummy.m"; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 		275C17A46F39C36327493626A168B6D5 /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
 		27BC0EBDAE14E89E57D584378BDA3116 /* Pods-Demo-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Demo-umbrella.h"; sourceTree = "<group>"; };
 		282ECFCD0084F94EC1DED9401AAFE7F5 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2C1BCF038AE2EF885CDC6A109E1C57C8 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2C1BCF038AE2EF885CDC6A109E1C57C8 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		2FC6BE071CBFEB7CA445E47F82F1AC11 /* FTImageViewController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FTImageViewController.xcconfig; sourceTree = "<group>"; };
 		30D89D8507CACF7710D579A9AC60E435 /* FTImageViewController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FTImageViewController-umbrella.h"; sourceTree = "<group>"; };
 		32AA8CECD58A96CA1EF8664096EC7E83 /* Kingfisher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Kingfisher.swift; path = Sources/Kingfisher.swift; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 		39818447082DF4DD68283291B8BAD127 /* FTZoomTransition-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FTZoomTransition-prefix.pch"; sourceTree = "<group>"; };
 		3F33AC12F88E0902F9861C0F5B9BED5B /* FormatIndicatedCacheSerializer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FormatIndicatedCacheSerializer.swift; path = Sources/FormatIndicatedCacheSerializer.swift; sourceTree = "<group>"; };
 		3F6361D280909159322FBE16EE6A3E21 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		46F6648D2CFCAD58AF4E8ED8F9672D90 /* Pods_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		46F6648D2CFCAD58AF4E8ED8F9672D90 /* Pods_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Demo.framework; path = "Pods-Demo.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F2F801F764AF609A3E2AD7B6E0927C4 /* Kingfisher-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Kingfisher-umbrella.h"; sourceTree = "<group>"; };
 		515013147DB35122D6BF894E64C7A3AA /* ImageTransition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageTransition.swift; path = Sources/ImageTransition.swift; sourceTree = "<group>"; };
 		547262DD11F44A793953694668E10D88 /* FTImageViewController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FTImageViewController.modulemap; sourceTree = "<group>"; };
@@ -137,13 +137,13 @@
 		8F37EBAE7E7BF42CAE825B3AD7556D5C /* FTImageViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTImageViewController.h; path = FTImageViewController/FTImageViewController.h; sourceTree = "<group>"; };
 		9055C8CA9FDB72B9F4DD59165924AF2F /* Kingfisher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Kingfisher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9154BF16DC759A1EDD6A1AB4E22AA07D /* Pods-Demo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Demo-acknowledgements.markdown"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		950E5A67E01E19B34D8E386CBB467393 /* Kingfisher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Kingfisher.h; path = Sources/Kingfisher.h; sourceTree = "<group>"; };
 		96DAAFF07F6958212EA8796B84B08D10 /* FTZoomTransition.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FTZoomTransition.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9790B6C423A650CC0897F262567686B9 /* RequestModifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RequestModifier.swift; path = Sources/RequestModifier.swift; sourceTree = "<group>"; };
 		9E11A8ABEAC76D76F22A1E51F36DCC0F /* Box.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Box.swift; path = Sources/Box.swift; sourceTree = "<group>"; };
 		A293EC6905CD2F770F31A1A57ACA0633 /* Pods-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Demo.debug.xcconfig"; sourceTree = "<group>"; };
-		A42F61D7ED790479AF37A04095E9D20F /* FTZoomTransition.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FTZoomTransition.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A42F61D7ED790479AF37A04095E9D20F /* FTZoomTransition.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FTZoomTransition.framework; path = FTZoomTransition.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A68294D41CAEB9A11B5E3874293156F6 /* FTPanDismissAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FTPanDismissAnimator.swift; path = FTZoomTransition/FTPanDismissAnimator.swift; sourceTree = "<group>"; };
 		A897DCE1634088C88F960442D823755A /* FTPresentAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FTPresentAnimator.swift; path = FTZoomTransition/FTPresentAnimator.swift; sourceTree = "<group>"; };
 		AA6352719B9866EFD8CB4BAA99162E76 /* Kingfisher-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Kingfisher-prefix.pch"; sourceTree = "<group>"; };
@@ -154,12 +154,12 @@
 		BFC5976DB662A77EBBA0AC8F36E32AAC /* FTZoomTransition.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FTZoomTransition.xcconfig; sourceTree = "<group>"; };
 		C025FF3124D4314794F2D7595547F23B /* FTZoomTransition.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FTZoomTransition.modulemap; sourceTree = "<group>"; };
 		C2C15ABA3DADD442F5942281FD8CDF89 /* Resource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Resource.swift; path = Sources/Resource.swift; sourceTree = "<group>"; };
-		C4F19526EBED9C291629E2F958E7E2DC /* FTImageViewController.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = FTImageViewController.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C4F19526EBED9C291629E2F958E7E2DC /* FTImageViewController.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = FTImageViewController.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C7BD6BACC3BE5706DF1D9E9F9F35ED6E /* FTZoomTransition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FTZoomTransition.swift; path = FTZoomTransition/FTZoomTransition.swift; sourceTree = "<group>"; };
 		C99D06A9C32F6771E55DA85034DFD7C6 /* ImageView+Kingfisher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ImageView+Kingfisher.swift"; path = "Sources/ImageView+Kingfisher.swift"; sourceTree = "<group>"; };
 		CDD91003180D0FE31C9EE15B1B4A171C /* Image.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Image.swift; path = Sources/Image.swift; sourceTree = "<group>"; };
 		D175D068BD61279C52A814E4A6A42BD8 /* FTImageScrollView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FTImageScrollView.swift; path = FTImageViewController/FTImageScrollView.swift; sourceTree = "<group>"; };
-		D5C5889633101937A63D249781D5D200 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D5C5889633101937A63D249781D5D200 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		D7ECD3096EA56B093D1B9AFCDB4C83C5 /* Placeholder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Placeholder.swift; path = Sources/Placeholder.swift; sourceTree = "<group>"; };
 		E1F61E3ECDF22A9CF84202352150CDA2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		E34C3FFD3EADE2AFDE798573D8F6F040 /* Kingfisher.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Kingfisher.xcconfig; sourceTree = "<group>"; };
@@ -232,6 +232,7 @@
 				C7BD6BACC3BE5706DF1D9E9F9F35ED6E /* FTZoomTransition.swift */,
 				8ED16C2170E334ADD5912E83B11E7C9A /* Support Files */,
 			);
+			name = FTZoomTransition;
 			path = FTZoomTransition;
 			sourceTree = "<group>";
 		};
@@ -347,6 +348,7 @@
 				FA2AE5E48ED9C988E21D33CECE2C180B /* UIButton+Kingfisher.swift */,
 				8843FEA426A73443EE8B54240C17A0C7 /* Support Files */,
 			);
+			name = Kingfisher;
 			path = Kingfisher;
 			sourceTree = "<group>";
 		};
@@ -388,10 +390,10 @@
 		F3ED629C02D33C50EB31DD0CD983DBA1 /* FTImageViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8F37EBAE7E7BF42CAE825B3AD7556D5C /* FTImageViewController.h */,
 				728C6C03BE28D6FB01EFD816104AC676 /* FTExtensions.swift */,
-				D175D068BD61279C52A814E4A6A42BD8 /* FTImageScrollView.swift */,
 				E8B904C819B70A90B94C372C8A21473D /* FTImageCollectionViewCell.swift */,
+				D175D068BD61279C52A814E4A6A42BD8 /* FTImageScrollView.swift */,
+				8F37EBAE7E7BF42CAE825B3AD7556D5C /* FTImageViewController.h */,
 				BE317397321A81DFA13B088A757C9855 /* FTImageViewController.swift */,
 				08598B99EE9B36D8F97998D23FA55613 /* Pod */,
 				431648F2391087E7D2B907C49FEE8CC7 /* Support Files */,
@@ -711,7 +713,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Debug;
@@ -1000,7 +1001,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_VERSION = 4.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;

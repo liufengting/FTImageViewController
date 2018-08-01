@@ -68,13 +68,21 @@
 				2A26FFB4210AC7F300E7400C /* AppDelegate.swift */,
 				2A26FFB6210AC7F300E7400C /* ViewController.swift */,
 				2A26FFDD210AE6A000E7400C /* ImageViewViewController.swift */,
-				2A26FFDB210ACA5500E7400C /* ImageCollectionViewCell.swift */,
+				2A3CE7F321103C0D00CDCD3A /* View */,
 				2A26FFB8210AC7F300E7400C /* Main.storyboard */,
 				2A26FFBB210AC7F400E7400C /* Assets.xcassets */,
 				2A26FFBD210AC7F400E7400C /* LaunchScreen.storyboard */,
 				2A26FFC0210AC7F400E7400C /* Info.plist */,
 			);
 			path = Demo;
+			sourceTree = "<group>";
+		};
+		2A3CE7F321103C0D00CDCD3A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2A26FFDB210ACA5500E7400C /* ImageCollectionViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		ADEA95A395C917218552BF31 /* Frameworks */ = {

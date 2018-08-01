@@ -8,94 +8,85 @@
 
 import UIKit
 
-open class FTPanDismissAnimator : UIPercentDrivenInteractiveTransition, UIGestureRecognizerDelegate {
+public protocol FTPanDismissAnimatorDelegate: NSObjectProtocol {
+    func viewControllerWillDismiss(viewController: UIViewController)
+}
+
+open class FTPanDismissAnimator: UIPercentDrivenInteractiveTransition, UIGestureRecognizerDelegate {
     
     public var interactionInProgress = false
     public weak var dismissAnimator: FTDismissAnimator!
+    public weak var viewController: UIViewController?
+    public weak var panDelegate: FTPanDismissAnimatorDelegate?
     fileprivate var shouldCompleteTransition = false
-    fileprivate weak var viewController: UIViewController!
-    fileprivate weak var gestureView: UIView!
-    fileprivate lazy var panGesture: UIPanGestureRecognizer = {
-        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handleGesture(_:)))
-        gesture.delegate = self
-        return gesture
-    }()
-    
-    public func wireToViewController(_ viewController: UIViewController!, for view: UIView) {
+
+    public func wireToViewController(_ viewController: UIViewController, for view: UIView) {
         self.viewController = viewController
-        self.gestureView = view
         preparePanGestureRecognizerInView(viewController.view)
     }
     
-    fileprivate func preparePanGestureRecognizerInView(_ view: UIView) {
-        if (self.panGesture.view != nil) {
-            self.panGesture.view?.removeGestureRecognizer(self.panGesture)
-        }
-        view.addGestureRecognizer(self.panGesture)
+    public func wireToViewController(_ viewController: UIViewController, delegate: FTPanDismissAnimatorDelegate) {
+        self.viewController = viewController
+        self.panDelegate = delegate
     }
     
-    @objc func handleGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+    public func handleDismissBegin() {
+        panDelegate?.viewControllerWillDismiss(viewController: self.viewController!)
+        interactionInProgress = true
+        viewController?.view.isHidden = true
+        viewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    public func handleDismissProgress(progress: CGFloat, translation: CGPoint) {
+        shouldCompleteTransition = (fabsf(Float(progress)) > 0.2)
+        viewController?.view.isHidden = true
+        self.updateTargetViewFrame(progress, translation: translation)
+        update(CGFloat(fabsf(Float(progress))))
+    }
+    
+    public func handleDismissCancel() {
+        interactionInProgress = false
+        viewController?.view.isHidden = false
+        cancel()
+    }
+    public func handleDismissFinish() {
+        interactionInProgress = false
+        viewController?.view.isHidden = true
+        self.finishAnimation()
+        finish()
+    }
+    
+    fileprivate func preparePanGestureRecognizerInView(_ view: UIView) {
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        gesture.delegate = self
+        view.addGestureRecognizer(gesture)
+    }
+    
+    @objc public func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         let translation = gestureRecognizer.translation(in: gestureRecognizer.view!)
         var progress = (translation.y / UIScreen.main.bounds.size.width)
-        progress = CGFloat(fminf(fmaxf(Float(progress), 0.0), 1.0))
+        progress = CGFloat(min(max(Float(progress), -1.0), 1.0))
         switch gestureRecognizer.state {
         case .began:
-            interactionInProgress = true
-            viewController.view.isHidden = true
-            viewController.dismiss(animated: true, completion: nil)
+            self.handleDismissBegin()
         case .changed:
-            shouldCompleteTransition = progress > 0.2
-            viewController.view.isHidden = true
-            self.updateTargetViewFrame(progress, translation: translation)
-            update(progress)
+            self.handleDismissProgress(progress: progress, translation: translation)
         case .cancelled:
-            viewController.view.isHidden = false
-            interactionInProgress = false
-            cancel()
+            self.handleDismissCancel()
         case .ended:
-            interactionInProgress = false
-            if !shouldCompleteTransition {
-                viewController.view.isHidden = false
-                cancel()
+            if shouldCompleteTransition {
+                self.handleDismissFinish()
             } else {
-                viewController.view.isHidden = true
-                self.finishAnimation()
-                finish()
+                self.handleDismissCancel()
             }
         default: break
         }
     }
     
-//    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if gestureRecognizer.isEqual(self.panGesture) {
-//            if gestureRecognizer.isKind(of: UIPanGestureRecognizer.classForCoder()) {
-//                let pan: UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
-//                if let sc: UIScrollView = gestureRecognizer.view as? UIScrollView {
-//                    if sc.contentSize.height > sc.bounds.size.height {
-//                        let translation : CGPoint = pan.translation(in: gestureRecognizer.view!)
-//                        print(translation)
-//                        if sc.contentOffset.y == 0 {
-//
-//                        } else if sc.contentOffset.y + sc.bounds.size.height >= UIScreen.main.bounds.size.height && translation.y > 0 {
-//
-//                        }
-//                    }else {
-//                        return true
-//                    }
-//                }
-//                if (gestureRecognizer.view?.isKind(of: UIScrollView.classForCoder()))! {
-//
-//                }
-//            }
-//        }
-//
-//        return true
-//    }
-    
     func updateTargetViewFrame(_ progress: CGFloat, translation: CGPoint) {
         let sourceFrame : CGRect = self.dismissAnimator.config.targetFrame
-        let targetWidth = sourceFrame.width*(1.0-progress)
-        let targetHeight = sourceFrame.height*(1.0-progress)
+        let targetWidth = sourceFrame.width*CGFloat((1.0-fabsf(Float(progress))))
+        let targetHeight = sourceFrame.height*CGFloat((1.0-fabsf(Float(progress))))
         let targetX = sourceFrame.origin.x + sourceFrame.size.width/2.0 - targetWidth/2.0 + translation.x
         let targetY = sourceFrame.origin.y + sourceFrame.size.height/2.0 - targetHeight/2.0 + translation.y
         self.dismissAnimator.config.transitionImageView.frame = CGRect(x: targetX, y: targetY, width: targetWidth, height: targetHeight)
@@ -113,4 +104,5 @@ open class FTPanDismissAnimator : UIPercentDrivenInteractiveTransition, UIGestur
             self.dismissAnimator.config.sourceView?.isHidden = false
         }
     }
+    
 }
