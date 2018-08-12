@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import FTZoomTransition
+import FTImageTransition
 import FTImageViewController
 
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    let ftZoomTransition = FTZoomTransition()
+    let ftZoomTransition = FTImageTransition()
 
     let cellMargin : CGFloat = 1.0
     let cellColums : NSInteger = 3
@@ -88,28 +88,29 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     func handleCellTapAtIndexPath(indexPath: IndexPath) {
         
         let sender : ImageCollectionViewCell = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
-        
-        // present
-        
-        var images: [FTImageResource] = []
-        for (_, value) in self.dataArray.enumerated() {
-            images.append(FTImageResource(image: nil, imageURLString: value))
-        }
-        
-
-        let detial = FTImageViewController(images: images, selectedIndex: indexPath.item)
         let targetRect : CGRect = (sender.contentImageView.image?.rectWithScreenWidth())!
 
         let config = FTZoomTransitionConfig(sourceView: sender,
                                             image: sender.contentImageView.image,
                                             targetFrame: targetRect)
         ftZoomTransition.config = config
-//        ftZoomTransition.wirePanDismissToViewController(detial, for: detial.collectionView)
-        detial.transitioningDelegate = ftZoomTransition
-        self.present(detial, animated: true, completion: {
 
+//        // present
+//
+        var images: [FTImageResource] = []
+        for (_, value) in self.dataArray.enumerated() {
+            images.append(FTImageResource(image: nil, imageURLString: value))
+        }
+
+        let ftPageViewController = FTImageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+//        ftPageViewController.currentIndex = 2
+        ftPageViewController.setupWithImages(images: images, selectedIndex: indexPath.item)
+        ftPageViewController.transitioningDelegate = ftZoomTransition
+        self.present(ftPageViewController, animated: true, completion: {
+            
         })
 
+        
     }
 
 }

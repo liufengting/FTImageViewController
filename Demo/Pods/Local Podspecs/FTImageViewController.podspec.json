@@ -25,9 +25,6 @@
   "dependencies": {
     "Kingfisher": [
       "~> 4.0"
-    ],
-    "FTZoomTransition": [
-      "~> 0.2.1"
     ]
   },
   "swift_version": "4.0"

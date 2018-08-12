@@ -1,6 +1,0 @@
-framework module FTZoomTransition {
-  umbrella header "FTZoomTransition-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.source_files  = "FTImageViewController", "FTImageViewController/*.{h,m,swift}"
 
   s.dependency "Kingfisher", "~> 4.0"
-  s.dependency "FTZoomTransition", "~> 0.2.1"
+  # s.dependency "FTZoomTransition", "~> 0.2.1"
   
   s.swift_version = '4.0'
 

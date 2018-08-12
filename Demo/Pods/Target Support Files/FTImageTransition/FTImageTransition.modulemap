@@ -1,0 +1,6 @@
+framework module FTImageTransition {
+  umbrella header "FTImageTransition-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -174,12 +174,12 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         let touchPoint = sender.location(in: self)
         if (self.zoomScale == self.maximumZoomScale){
             self.setZoomScale(self.minimumZoomScale, animated: true)
-            if (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(ftImageScrollView:))))! {
+            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(ftImageScrollView:))))!) {
                 self.tapDelegate?.ftImageScrollViewDidZoomIn!(ftImageScrollView: self)
             }
         }else{
             self.zoom(to: CGRect(x: touchPoint.x, y: touchPoint.y, width: 1, height: 1), animated: true)
-            if (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(ftImageScrollView:))))! {
+            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(ftImageScrollView:))))!) {
                 self.tapDelegate?.ftImageScrollViewDidZoomOut!(ftImageScrollView: self)
             }
         }

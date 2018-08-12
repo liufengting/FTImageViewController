@@ -10,7 +10,8 @@
 #endif
 #endif
 
+#import "FTImageTransition.h"
 
-FOUNDATION_EXPORT double FTZoomTransitionVersionNumber;
-FOUNDATION_EXPORT const unsigned char FTZoomTransitionVersionString[];
+FOUNDATION_EXPORT double FTImageTransitionVersionNumber;
+FOUNDATION_EXPORT const unsigned char FTImageTransitionVersionString[];
 
