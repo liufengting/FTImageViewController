@@ -10,7 +10,7 @@ import UIKit
 import FTImageTransition
 import FTImageViewController
 
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FTImageTransitionDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     let ftZoomTransition = FTImageTransition()
@@ -94,23 +94,55 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
                                             image: sender.contentImageView.image,
                                             targetFrame: targetRect)
         ftZoomTransition.config = config
-
-//        // present
-//
+        ftZoomTransition.delegate = self
         var images: [FTImageResource] = []
         for (_, value) in self.dataArray.enumerated() {
             images.append(FTImageResource(image: nil, imageURLString: value))
         }
-
-        let ftPageViewController = FTImageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-//        ftPageViewController.currentIndex = 2
-        ftPageViewController.setupWithImages(images: images, selectedIndex: indexPath.item)
+        let ftPageViewController = FTImageViewController(images: images, selectedIndex: indexPath.item)
         ftPageViewController.transitioningDelegate = ftZoomTransition
+        ftZoomTransition.wirePanDismissToViewController(ftPageViewController)
         self.present(ftPageViewController, animated: true, completion: {
             
         })
+    }
+    
+    
+    //    MARK: - UIViewControllerTransitioningDelegate
+    
+    public func ftImageTransitionWillStartPresent(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
+        print("ftImageTransitionDidStartPresent")
 
-        
+    }
+    
+    public func ftImageTransitionDidFinishPresent(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
+        print("ftImageTransitionDidFinishPresent")
+
+    }
+
+    public func ftImageTransitionWillStartDismiss(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
+        print("ftImageTransitionWillStartDismiss")
+        if let fromVC: FTImageViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as? FTImageViewController {
+            if let cell : ImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: fromVC.currentIndex, section: 0)) as? ImageCollectionViewCell {
+                cell.contentImageView.isHidden = true
+                transition?.config.targetFrame = fromVC.rectForCurrentIndex()
+                transition?.config.sourceFrame = self.collectionView.convert(cell.frame, to: UIApplication.shared.keyWindow)
+                transition?.config.transitionImageView.image = cell.contentImageView.image
+            }
+        }
+    }
+    
+    public func ftImageTransitionDidCancelDismiss(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
+        print("ftImageTransitionWillStartDismiss")
+    }
+    
+    public func ftImageTransitionDidFinishDismiss(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
+        print("ftImageTransitionDidFinishDismiss")
+        if let fromVC: FTImageViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as? FTImageViewController {
+            if let cell : ImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: fromVC.currentIndex, section: 0)) as? ImageCollectionViewCell {
+                cell.contentImageView.isHidden = false
+            }
+        }
     }
 
 }

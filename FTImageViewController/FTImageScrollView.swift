@@ -60,12 +60,12 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         return dt
     }()
     
-    open lazy var panGesture : UIPanGestureRecognizer = {
-        let pg = UIPanGestureRecognizer()
-        pg.maximumNumberOfTouches = 1
-        pg.minimumNumberOfTouches = 1
-        return pg
-    }()
+//    open lazy var panGesture : UIPanGestureRecognizer = {
+//        let pg = UIPanGestureRecognizer()
+//        pg.maximumNumberOfTouches = 1
+//        pg.minimumNumberOfTouches = 1
+//        return pg
+//    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,7 +91,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         self.minimumZoomScale = 1.0
         self.maximumZoomScale = 3.0
-        self.isScrollEnabled = false
+        self.isScrollEnabled = true
         self.delegate = self
         self.setupGestures()
     }

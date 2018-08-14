@@ -7,74 +7,44 @@
 //
 
 import UIKit
+import FTImageTransition
 
 public protocol FTImageViewControllerDelegate {
     func ftImageViewController(ftImageViewController: FTImageViewController, didScrollToPage page: NSInteger)
 }
 
-open class FTImageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource, FTImageScrollViewDelegate {
+open class FTImageViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FTImageScrollViewDelegate {
 
-    var imageResources: [FTImageResource] = []
-    public var currentIndex: NSInteger = 0 {
-        didSet {
-            self.reload()
-        }
-    }
+    public var imageResources: [FTImageResource] = []
+    public var currentIndex: NSInteger = 0
     
-    public var subViewControllers: Array<UIViewController> = [] {
-        didSet {
-            self.reload()
-        }
-    }
-    
+    public lazy var collectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
+        flowLayout.itemSize = CGSize(width: UIScreen.width(), height: UIScreen.height())
+        flowLayout.minimumInteritemSpacing = 0.0
+        flowLayout.minimumLineSpacing = 0.0
+        let cv = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
+        cv.backgroundColor = .clear
+        cv.isPagingEnabled = true
+        cv.register(FTImageCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: FTImageCollectionViewCell.identifier)
+        cv.delegate = self
+        cv.dataSource = self
+        return cv
+    }()
 
-
-    
-    public override init(transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]? = nil) {
-        super.init(transitionStyle: style, navigationOrientation: navigationOrientation, options: options)
-        self.setup()
-    }
-    
-    required public init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.setup()
-    }
-    
-    public func setup() {
-        self.delegate = self
-        self.dataSource = self
-    }
-    
-    override open func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = UIColor.black
-
-        
-//        if let transDelegate: FTZoomTransition = self.transitioningDelegate as? FTZoomTransition {
-//            transDelegate.panDismissAnimator.wireToViewController(self, delegate: self)
-//        }
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-//            self.reload()
-//        }
-    }
-    
-    public func setupWithImages(images: [FTImageResource], selectedIndex: NSInteger) {
+    public convenience init(images: [FTImageResource], selectedIndex: NSInteger) {
+        self.init()
         self.imageResources = images
         self.currentIndex = selectedIndex
-
-        for (_, value) in self.imageResources.enumerated() {
-            let imagevc = FTImageContainerViewController()
-            imagevc.imageResource = value
-            imagevc.imageScrollView.tapDelegate = self
-            self.subViewControllers.append(imagevc)
-        }
-        
     }
     
-    public func reload() {
-        if self.subViewControllers.count > 0 && self.currentIndex <= self.subViewControllers.count - 1 && self.isViewLoaded {
-            let VC : UIViewController = self.subViewControllers[self.currentIndex]
-            self.setViewControllers([VC], direction: .forward, animated: false) { (completion) in }
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = UIColor.black
+        self.view.addSubview(self.collectionView)
+        if self.currentIndex != 0 {
+            self.scrollToPage(page: self.currentIndex, animated: false)
         }
     }
     
@@ -84,94 +54,92 @@ open class FTImageViewController: UIPageViewController, UIPageViewControllerDele
     
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.reload()
     }
     
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
-    public func reloadWithImages(images: [FTImageResource], selectPage: NSInteger) {
-        self.imageResources = images
-
-        self.scrollToPage(page: selectPage, animated: true)
+    func reload() {
+        self.collectionView.reloadData()
+        self.scrollToPage(page: currentIndex, animated: true)
+    }
+    
+    public func rectForCurrentIndex() -> CGRect {
+        if let cell : FTImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: self.currentIndex, section: 0)) as? FTImageCollectionViewCell {
+            return cell.convert(cell.imageScrollView.imageView.frame, to: UIApplication.shared.keyWindow)
+        }
+        return CGRect.zero
     }
     
     public func scrollToPage(page: NSInteger, animated: Bool) {
-
+        self.collectionView.scrollToItem(at: IndexPath(item: (min(max(0, page), self.imageResources.count-1)), section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: animated)
     }
     
     public func ftImageViewController(ftImageViewController: FTImageViewController, didScrollToPage page: NSInteger) {
 
     }
     
+    // MARK: - UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
     
-    //    MARK: - UIPageViewControllerDelegate, UIPageViewControllerDataSource
-    
-    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        let index = self.subViewControllers.firstIndex(of: viewController)
-        return (index == 0 || index == NSNotFound || index == nil) ? nil : self.subViewControllers[index!-1];
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
-    public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        let index = self.subViewControllers.firstIndex(of: viewController)
-        return (index == 0 || index == NSNotFound || index == nil || index! >= self.subViewControllers.count - 1) ? nil : self.subViewControllers[index!+1];
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
     
-    public func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-        
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
-    public func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if (completed) {
-            
-        }
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: UIScreen.width(), height: UIScreen.height())
     }
     
-//    - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed;
-
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.imageResources.count
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell : FTImageCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: FTImageCollectionViewCell.identifier,
+            for: indexPath) as! FTImageCollectionViewCell
+        cell.setupWithImageResource(imageResource: self.imageResources[indexPath.item])
+        cell.imageScrollView.tapDelegate = self
+//        cell.panGesture.addTarget(self, action: #selector(handlePanGesture(gesture:)))
+        return cell
+    }
+    
+//    @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
+//        if let transDelegate: FTImageTransition = self.transitioningDelegate as? FTImageTransition {
+//            transDelegate.panDismissAnimator.handlePanGesture(gesture)
+//        }
+//    }
+    
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+    }
+    
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.currentIndex = NSInteger(scrollView.contentOffset.x / scrollView.bounds.size.width)
         self.ftImageViewController(ftImageViewController: self, didScrollToPage: self.currentIndex)
     }
     
-    @objc func handlePanGesture(gesture: UIPanGestureRecognizer) {
-//        if let transDelegate: FTZoomTransition = self.transitioningDelegate as? FTZoomTransition {
-//            transDelegate.panDismissAnimator.handlePanGesture(gesture)
-//        }
-    }
     
     // MARK: - FTImageScrollViewDelegate
     
     public func ftImageScrollView(ftImageScrollView: FTImageScrollView, didRecognizeSingleTapGesture gesture: UITapGestureRecognizer) {
         self.dismiss(animated: true) { }
     }
-    
-    public func ftImageScrollViewDidZoomOut(ftImageScrollView: FTImageScrollView) {
-        
-    }
-    
-    public func ftImageScrollViewDidZoomIn(ftImageScrollView: FTImageScrollView) {
-        
-    }
-    
-    public func viewControllerWillDismiss(viewController: UIViewController) {
-//        if let cell : FTImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: self.currentIndex, section: 0)) as? FTImageCollectionViewCell {
-//            if let transDelegate: FTZoomTransition = self.transitioningDelegate as? FTZoomTransition {
-//                transDelegate.config.targetFrame = cell.imageScrollView.imageView.frame
-//                transDelegate.config.transitionImageView.image = cell.imageScrollView.imageView.image
-//            }
-//        }
-        
-        
-    }
-    
+
 }
 
 extension FTImageViewController {
     
     fileprivate func addOrientationChangeNotification() {
-        NotificationCenter.default.addObserver(self,selector: #selector(onChangeStatusBarOrientationNotification(notification:)),
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onChangeStatusBarOrientationNotification(notification:)),
                                                name: NSNotification.Name.UIApplicationDidChangeStatusBarOrientation,
                                                object: nil)
     }
@@ -182,7 +150,7 @@ extension FTImageViewController {
     
     @objc fileprivate func onChangeStatusBarOrientationNotification(notification : Notification) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-//            self.collectionView.reloadData()
+            self.collectionView.reloadData()
         })
     }
     

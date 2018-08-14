@@ -5,6 +5,6 @@ target 'Demo' do
   use_frameworks!
 
   pod 'FTImageViewController', :path => '../'
-  pod 'FTImageTransition', :path => '../'
+  pod 'FTImageTransition'
 
 end

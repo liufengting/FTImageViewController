@@ -25,6 +25,9 @@
   "dependencies": {
     "Kingfisher": [
       "~> 4.0"
+    ],
+    "FTImageTransition": [
+      "~> 0.0.1"
     ]
   },
   "swift_version": "4.0"

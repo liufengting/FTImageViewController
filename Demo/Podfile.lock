@@ -1,28 +1,28 @@
 PODS:
-  - FTImageTransition (0.2.1)
+  - FTImageTransition (0.0.1)
   - FTImageViewController (0.0.1):
+    - FTImageTransition (~> 0.0.1)
     - Kingfisher (~> 4.0)
   - Kingfisher (4.8.1)
 
 DEPENDENCIES:
-  - FTImageTransition (from `../`)
+  - FTImageTransition
   - FTImageViewController (from `../`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - FTImageTransition
     - Kingfisher
 
 EXTERNAL SOURCES:
-  FTImageTransition:
-    :path: "../"
   FTImageViewController:
     :path: "../"
 
 SPEC CHECKSUMS:
-  FTImageTransition: fe423a289d5668f60c37396933cd92243c8a5348
-  FTImageViewController: 12693c4f20db4264a6795d978254e9742fb20af4
+  FTImageTransition: ba06ef2e29a2d470453418f93fcf5b50512fed53
+  FTImageViewController: 87f113f0aba59e6fc851b18ef54f04014c924277
   Kingfisher: 868c1149679a7ab6869be118faa9b5aed154aaf0
 
-PODFILE CHECKSUM: c7afa0e6ebf9c136a9b4cdf10fde4b35a2ee4c18
+PODFILE CHECKSUM: 3df08d5e3b33360b264235eb56a720adbfd9122d
 
 COCOAPODS: 1.5.3

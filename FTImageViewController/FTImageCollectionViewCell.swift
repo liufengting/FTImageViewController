@@ -8,16 +8,35 @@
 
 import UIKit
 
-class FTImageCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelegate {
+class FTImageCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "\(FTImageCollectionViewCell.classForCoder())"
     
-
+//    public lazy var panGesture: UIPanGestureRecognizer = {
+//        let pan = UIPanGestureRecognizer()
+//        pan.delegate = self
+//        return pan
+//    }()
     
-
+    public lazy var imageScrollView : FTImageScrollView = {
+        let imageSV = FTImageScrollView(frame: CGRect(x: 0, y: 0, width: UIScreen.width(), height: UIScreen.height()))
+//        imageSV.addGestureRecognizer(self.panGesture)
+        return imageSV
+    }()
+    
+    public func setupWithImageResource(imageResource: FTImageResource) {
+        self.backgroundColor = UIColor.clear
+        if self.imageScrollView.superview != nil {
+            self.imageScrollView.removeFromSuperview()
+        }
+        if self.imageScrollView.superview == nil {
+            self.contentView.addSubview(self.imageScrollView)
+        }
+        self.imageScrollView.setupWithImageResource(imageResource: imageResource)
+    }
     
 //    //    MARK: - UIGestureRecognizerDelegate
-//    
+//
 //    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
 //        if gestureRecognizer.isEqual(self.panGesture) {
 //            let translatedPoint = (gestureRecognizer as! UIPanGestureRecognizer).translation(in: gestureRecognizer.view)
@@ -41,5 +60,5 @@ class FTImageCollectionViewCell: UICollectionViewCell, UIGestureRecognizerDelega
 //        }
 //        return true
 //    }
-//    
+    
 }
