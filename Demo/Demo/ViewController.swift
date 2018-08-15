@@ -88,7 +88,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     func handleCellTapAtIndexPath(indexPath: IndexPath) {
         
         let sender : ImageCollectionViewCell = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
-        let targetRect : CGRect = (sender.contentImageView.image?.rectWithScreenWidth())!
+        let targetRect : CGRect = (sender.contentImageView.image?.rectWithScreenSize())!
 
         let config = FTZoomTransitionConfig(sourceView: sender,
                                             image: sender.contentImageView.image,

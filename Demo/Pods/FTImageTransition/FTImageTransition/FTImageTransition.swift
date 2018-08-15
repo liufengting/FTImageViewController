@@ -13,7 +13,7 @@ open class FTZoomTransitionConfig {
     open var sourceView: UIView?
     open var sourceFrame = CGRect.zero
     open var targetFrame = CGRect.zero
-    open var animationDuriation : TimeInterval = 0.45
+    open var animationDuriation : TimeInterval = 0.2
     open lazy var transitionImageView: UIImageView = {
         let iv = UIImageView()
         iv.clipsToBounds = true
@@ -78,7 +78,7 @@ open class FTImageTransition: NSObject, UIViewControllerTransitioningDelegate, F
     }()
     
     public weak var delegate: FTImageTransitionDelegate?
-
+    
     public func wirePanDismissToViewController(_ viewController: UIViewController!) {
         self.panDismissAnimator.wirePanDismissToViewController(viewController: viewController)
     }
@@ -108,7 +108,7 @@ open class FTImageTransition: NSObject, UIViewControllerTransitioningDelegate, F
             self.delegate?.ftImageTransitionWillStartPresent!(transition: self, transitionContext: transitionContext)
         }
     }
-
+    
     public func ftImageTransitionDidFinishPresent(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
         if self.delegate != nil && (self.delegate!.responds(to: #selector(FTImageTransitionDelegate.ftImageTransitionDidFinishPresent(transition:transitionContext:)))) {
             self.delegate?.ftImageTransitionDidFinishPresent!(transition: self, transitionContext: transitionContext)
@@ -139,7 +139,7 @@ open class FTImageTransitionPresentAnimator: NSObject, UIViewControllerAnimatedT
     
     public weak var config : FTZoomTransitionConfig!
     public weak var delegate: FTImageTransitionDelegate?
-
+    
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval{
         return max(FTZoomTransitionConfig.maxAnimationDuriation(), config.animationDuriation)
     }
@@ -164,7 +164,7 @@ open class FTImageTransitionPresentAnimator: NSObject, UIViewControllerAnimatedT
         toVC.view.alpha = 0
         self.config.sourceView?.isHidden = true
         self.config.transitionImageView.frame = config.sourceFrame
-
+        
         UIView.animateKeyframes(withDuration: transitionDuration(using: transitionContext),
                                 delay: 0,
                                 options: UIViewKeyframeAnimationOptions.calculationModeCubic,
@@ -173,7 +173,7 @@ open class FTImageTransitionPresentAnimator: NSObject, UIViewControllerAnimatedT
                                         self.config.transitionImageView.frame = self.config.targetFrame
                                         fromVC.view.alpha = 0
                                     })
-
+                                    
                                     UIView.addKeyframe(withRelativeStartTime: 0.9, relativeDuration: 0.1, animations: {
                                         toVC.view.alpha = 1
                                     })
@@ -196,11 +196,11 @@ open class FTImageTransitionDismissAnimator: NSObject, UIViewControllerAnimatedT
     
     public weak var config : FTZoomTransitionConfig!
     public weak var delegate: FTImageTransitionDelegate?
-
+    
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval{
         return max(FTZoomTransitionConfig.maxAnimationDuriation(), config.animationDuriation)
     }
-    
+
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if config == nil {
             return
@@ -264,15 +264,26 @@ open class FTImageTransitionPanDismissAnimator : UIPercentDrivenInteractiveTrans
     public weak var viewController: UIViewController?
     fileprivate var shouldCompleteTransition = false
     public weak var delegate: FTImageTransitionDelegate?
-
+    
     lazy var panGesture : UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
         return gesture
     }()
-
+    
+    lazy var edgePanGesture : UIScreenEdgePanGestureRecognizer = {
+        let gesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgePanGesture(_:)))
+        gesture.edges = .left
+        return gesture
+    }()
+    
     public func wirePanDismissToViewController(viewController: UIViewController) {
         self.viewController = viewController
         preparePanGestureRecognizerInView(viewController.view)
+    }
+    
+//    not working
+    public func wireEdgePanDismissToViewController(viewController: UIViewController) {
+        prepareEdgePanGestureRecognizerInView(viewController.view)
     }
     
     public func handleDismissBegin() {
@@ -296,7 +307,6 @@ open class FTImageTransitionPanDismissAnimator : UIPercentDrivenInteractiveTrans
     
     public func handleDismissFinish() {
         interactionInProgress = false
-        viewController?.view.isHidden = true
         self.finishAnimation()
         finish()
     }
@@ -304,14 +314,20 @@ open class FTImageTransitionPanDismissAnimator : UIPercentDrivenInteractiveTrans
     fileprivate func preparePanGestureRecognizerInView(_ view: UIView) {
         view.addGestureRecognizer(self.panGesture)
     }
+    
+    fileprivate func prepareEdgePanGestureRecognizerInView(_ view: UIView) {
+        view.addGestureRecognizer(self.edgePanGesture)
+    }
 
     @objc public func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         let translation = gestureRecognizer.translation(in: gestureRecognizer.view!)
         var progress: CGFloat = 0.0
         if gestureRecognizer.isEqual(self.panGesture) {
-            progress = (translation.y / UIScreen.main.bounds.size.height)
+            progress = (translation.y / (gestureRecognizer.view?.bounds.size.height)!)
+        } else if gestureRecognizer.isEqual(self.edgePanGesture) {
+            progress = (translation.x / (gestureRecognizer.view?.bounds.size.width)!)
         } else {
-            progress = (translation.x / UIScreen.main.bounds.size.width)
+            return
         }
         progress = CGFloat(min(max(Float(progress), -1.0), 1.0))
         switch gestureRecognizer.state {
@@ -331,7 +347,12 @@ open class FTImageTransitionPanDismissAnimator : UIPercentDrivenInteractiveTrans
         }
     }
     
+    @objc public func handleEdgePanGesture(_ gesture: UIScreenEdgePanGestureRecognizer) {
+        
+    }
+    
     func updateTargetViewFrame(_ progress: CGFloat, translation: CGPoint) {
+        viewController?.view.alpha = progress
         let sourceFrame : CGRect = self.dismissAnimator.config.targetFrame
         let targetWidth = sourceFrame.width*CGFloat((1.0-fabsf(Float(progress))))
         let targetHeight = sourceFrame.height*CGFloat((1.0-fabsf(Float(progress))))
@@ -347,6 +368,7 @@ open class FTImageTransitionPanDismissAnimator : UIPercentDrivenInteractiveTrans
                        animations: {
                         self.dismissAnimator.config.transitionImageView.frame = self.dismissAnimator.config.sourceFrame
         }) { (complete) in
+            self.viewController?.view.isHidden = true
             self.dismissAnimator.config.transitionImageView.isHidden = true
         }
     }

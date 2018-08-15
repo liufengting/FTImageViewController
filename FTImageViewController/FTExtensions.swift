@@ -29,16 +29,23 @@ extension UIImage {
         return size
     }
     
-    public func sizeWithScreenWidth() -> CGSize {
-        return self.sizeWithWidth(width: UIScreen.width())
+    public func sizeWithHeight(height: CGFloat) -> CGSize {
+        var size = CGSize.zero
+        size.height = height
+        size.width = (self.size.width * height)/self.size.height
+        return size
     }
     
-    public func rectWithScreenWidth() -> CGRect {
-        let size = self.sizeWithScreenWidth()
+    public func sizeWithScreenSize() -> CGSize {
+        return self.sizeWithWidth(width: min(UIScreen.width(), UIScreen.height()))
+    }
+    
+    public func rectWithScreenSize() -> CGRect {
+        let size = self.sizeWithScreenSize()
         if size.height > UIScreen.height() {
-            return CGRect(origin: CGPoint.zero, size: size)
+            return CGRect(origin: CGPoint(x: (UIScreen.width() - size.width)/2.0, y: 0), size: size)
         } else {
-            return CGRect(origin: CGPoint(x: 0, y: (UIScreen.height() - size.height)/2.0), size: size)
+            return CGRect(origin: CGPoint(x: (UIScreen.width() - size.width)/2.0, y: (UIScreen.height() - size.height)/2.0), size: size)
         }
     }
     

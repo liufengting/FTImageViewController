@@ -18,15 +18,15 @@ open class FTImageViewController: UIViewController, UICollectionViewDataSource, 
     public var imageResources: [FTImageResource] = []
     public var currentIndex: NSInteger = 0
     
-    public lazy var collectionView: UICollectionView = {
+    public lazy var collectionView: FTImageCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
         flowLayout.itemSize = CGSize(width: UIScreen.width(), height: UIScreen.height())
         flowLayout.minimumInteritemSpacing = 0.0
         flowLayout.minimumLineSpacing = 0.0
-        let cv = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
-        cv.backgroundColor = .clear
-        cv.isPagingEnabled = true
+        let cv = FTImageCollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
+//        [leftButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+        cv.translatesAutoresizingMaskIntoConstraints = false
         cv.register(FTImageCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: FTImageCollectionViewCell.identifier)
         cv.delegate = self
         cv.dataSource = self
@@ -42,10 +42,25 @@ open class FTImageViewController: UIViewController, UICollectionViewDataSource, 
     open override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.black
+        self.addOrientationChangeNotification()
         self.view.addSubview(self.collectionView)
+        let views: [String: AnyObject] = ["collectionView" : self.collectionView]
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:"H:|-0-[collectionView]-0-|",options: [], metrics: [:],  views:views))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat:"V:|-0-[collectionView]-0-|",options: [], metrics: [:],  views:views))
+
+        
         if self.currentIndex != 0 {
             self.scrollToPage(page: self.currentIndex, animated: false)
         }
+        
+//        if let gestures = self.view.gestureRecognizers {
+//            for recognizer in gestures {
+//                if recognizer.isKind(of: UIScreenEdgePanGestureRecognizer.classForCoder()) {
+//                    self.collectionView.panGestureRecognizer.require(toFail: recognizer as! UIScreenEdgePanGestureRecognizer)
+//                    break
+//                }
+//            }
+//        }
     }
     
     open override func viewDidLayoutSubviews() {
@@ -62,7 +77,7 @@ open class FTImageViewController: UIViewController, UICollectionViewDataSource, 
     
     func reload() {
         self.collectionView.reloadData()
-        self.scrollToPage(page: currentIndex, animated: true)
+        self.scrollToPage(page: currentIndex, animated: false)
     }
     
     public func rectForCurrentIndex() -> CGRect {
@@ -150,7 +165,7 @@ extension FTImageViewController {
     
     @objc fileprivate func onChangeStatusBarOrientationNotification(notification : Notification) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
-            self.collectionView.reloadData()
+            self.reload()
         })
     }
     

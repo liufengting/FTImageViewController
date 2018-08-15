@@ -60,18 +60,10 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         return dt
     }()
     
-//    open lazy var panGesture : UIPanGestureRecognizer = {
-//        let pg = UIPanGestureRecognizer()
-//        pg.maximumNumberOfTouches = 1
-//        pg.minimumNumberOfTouches = 1
-//        return pg
-//    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.commonSetup()
     }
-    
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -82,8 +74,6 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.backgroundColor = UIColor.clear
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.never
-        } else {
-
         }
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
@@ -107,10 +97,14 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.activityIndicator.frame = CGRect(x: frame.width/2.0, y: frame.height/2.0, width: 40.0, height: 40.0);
     }
     
+    public func prepareForReuse() {
+        self.setZoomScale(1.0, animated: true)
+        self.updateFrameWithImage(image: imageView.image)
+    }
+    
     public func setupWithImageResource(imageResource : FTImageResource) {
         self.addSubview(activityIndicator)
         self.addSubview(imageView)
-        
         self.loadImageResource(imageResource: imageResource)
     }
     
@@ -135,14 +129,13 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         }
     }
     
-    func updateFrameWithImage(image: UIImage?) {
+    public func updateFrameWithImage(image: UIImage?) {
         if let im = image {
-            let rect = im.rectWithScreenWidth()
+            let rect = im.rectWithScreenSize()
             self.imageView.frame = rect
             self.contentSize = CGSize(width: UIScreen.width(), height: max(rect.height, UIScreen.height()))
         }
     }
-    
     
     //    MARK: - UIScrollViewDelegate
     
@@ -159,7 +152,6 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         rct.origin.x = (ws > w) ? (ws-w)/2 : 0
         rct.origin.y = (hs > h) ? (hs-h)/2 : 0
         imageView.frame = rct;
-        print(rct)
     }
     
     //    MARK: - handleSingleTap
