@@ -14,10 +14,6 @@ class ImageViewViewController: FTImageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
     }
-    
-    
-
 
 }

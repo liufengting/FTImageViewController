@@ -25,9 +25,9 @@ public struct FTImageResource : FTImageResourceProtocol {
 }
 
 @objc public protocol FTImageScrollViewDelegate: NSObjectProtocol {
-    func ftImageScrollView(ftImageScrollView: FTImageScrollView, didRecognizeSingleTapGesture gesture: UITapGestureRecognizer)
-    @objc optional func ftImageScrollViewDidZoomOut(ftImageScrollView: FTImageScrollView)
-    @objc optional func ftImageScrollViewDidZoomIn(ftImageScrollView: FTImageScrollView)
+    func ftImageScrollView(imageScrollView: FTImageScrollView, didRecognizeSingleTapGesture gesture: UITapGestureRecognizer)
+    @objc optional func ftImageScrollViewDidZoomOut(imageScrollView: FTImageScrollView, at scale: CGFloat)
+    @objc optional func ftImageScrollViewDidZoomIn(imageScrollView: FTImageScrollView, at scale: CGFloat)
 }
 
 public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
@@ -102,29 +102,31 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.updateFrameWithImage(image: imageView.image)
     }
     
-    public func setupWithImageResource(imageResource : FTImageResource) {
+    public func setupWithImageResource(imageResource : FTImageResource?) {
         self.addSubview(activityIndicator)
         self.addSubview(imageView)
         self.loadImageResource(imageResource: imageResource)
     }
     
-    fileprivate func loadImageResource(imageResource: FTImageResource) {
+    fileprivate func loadImageResource(imageResource: FTImageResource?) {
         activityIndicator.startAnimating()
-        if let img : UIImage = imageResource.image {
-            imageView.image = img
-            activityIndicator.stopAnimating()
-            self.updateFrameWithImage(image: img)
-        }else if let imageURL : String = imageResource.imageURLString {
-            imageView.kf.setImage(with: URL(string: imageURL)!,
-                                  placeholder: nil,
-                                  options: nil,
-                                  progressBlock: { (done, total) in
-                                    
-            }) { (image, error, cashType, url) in
-                if image != nil && error == nil {
-                    self.activityIndicator.stopAnimating()
+        if let resource: FTImageResource = imageResource {
+            if let img : UIImage = resource.image {
+                imageView.image = img
+                activityIndicator.stopAnimating()
+                self.updateFrameWithImage(image: img)
+            }else if let imageURL : String = resource.imageURLString {
+                imageView.kf.setImage(with: URL(string: imageURL)!,
+                                      placeholder: nil,
+                                      options: nil,
+                                      progressBlock: { (done, total) in
+                                        
+                }) { (image, error, cashType, url) in
+                    if image != nil && error == nil {
+                        self.activityIndicator.stopAnimating()
+                    }
+                    self.updateFrameWithImage(image: image)
                 }
-                self.updateFrameWithImage(image: image)
             }
         }
     }
@@ -144,35 +146,51 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     }
         
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat){
-        let ws = scrollView.frame.size.width - scrollView.contentInset.left - scrollView.contentInset.right
-        let hs = scrollView.frame.size.height - scrollView.contentInset.top - scrollView.contentInset.bottom
-        let w = imageView.frame.size.width
-        let h = imageView.frame.size.height
-        var rct = imageView.frame
-        rct.origin.x = (ws > w) ? (ws-w)/2 : 0
-        rct.origin.y = (hs > h) ? (hs-h)/2 : 0
-        imageView.frame = rct;
+//        let ws = scrollView.frame.size.width - scrollView.contentInset.left - scrollView.contentInset.right
+//        let hs = scrollView.frame.size.height - scrollView.contentInset.top - scrollView.contentInset.bottom
+//        let w = imageView.frame.size.width
+//        let h = imageView.frame.size.height
+//        var rct = imageView.frame
+//        rct.origin.x = (ws > w) ? (ws-w)/2 : 0
+//        rct.origin.y = (hs > h) ? (hs-h)/2 : 0
+//        imageView.frame = rct;
+        let offsetX = (scrollView.frame.size.width > scrollView.contentSize.width) ? (scrollView.frame.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+        let offsetY = (scrollView.frame.size.height > scrollView.contentSize.height) ? (scrollView.frame.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+        self.imageView.center = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y:scrollView.contentSize.height * 0.5 + offsetY);
     }
     
     //    MARK: - handleSingleTap
     
     @objc func handleSingleTap(sender: UITapGestureRecognizer){
-        self.tapDelegate?.ftImageScrollView(ftImageScrollView: self, didRecognizeSingleTapGesture: sender)
+        self.tapDelegate?.ftImageScrollView(imageScrollView: self, didRecognizeSingleTapGesture: sender)
     }
     
     //    MARK: - handleDoubleTap
     
     @objc func handleDoubleTap(sender: UITapGestureRecognizer){
-        let touchPoint = sender.location(in: self)
-        if (self.zoomScale == self.maximumZoomScale){
+        let touchPoint = sender.location(in: self.imageView)
+//        if (self.zoomScale == self.maximumZoomScale){
+//            self.setZoomScale(self.minimumZoomScale, animated: true)
+//            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(imageScrollView:))))!) {
+//                self.tapDelegate?.ftImageScrollViewDidZoomIn!(ftImageScrollView: self)
+//            }
+//        }else{
+//            self.zoom(to: CGRect(x: touchPoint.x, y: touchPoint.y, width: 1, height: 1), animated: true)
+//            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(imageScrollView:))))!) {
+//                self.tapDelegate?.ftImageScrollViewDidZoomOut!(ftImageScrollView: self)
+//            }
+//        }
+        if (self.zoomScale > self.minimumZoomScale) {
             self.setZoomScale(self.minimumZoomScale, animated: true)
-            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(ftImageScrollView:))))!) {
-                self.tapDelegate?.ftImageScrollViewDidZoomIn!(ftImageScrollView: self)
+            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(imageScrollView:at:))))!) {
+                self.tapDelegate?.ftImageScrollViewDidZoomIn!(imageScrollView: self, at: self.minimumZoomScale)
             }
-        }else{
-            self.zoom(to: CGRect(x: touchPoint.x, y: touchPoint.y, width: 1, height: 1), animated: true)
-            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(ftImageScrollView:))))!) {
-                self.tapDelegate?.ftImageScrollViewDidZoomOut!(ftImageScrollView: self)
+        } else {
+            let width = self.frame.size.width / self.maximumZoomScale;
+            let height = self.frame.size.height / self.maximumZoomScale;
+            self.zoom(to: CGRect(x: touchPoint.x - width/2, y: touchPoint.y - height/2, width:  width, height: height), animated: true)
+            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(imageScrollView:at:))))!) {
+                self.tapDelegate?.ftImageScrollViewDidZoomOut!(imageScrollView: self, at: self.maximumZoomScale)
             }
         }
     }

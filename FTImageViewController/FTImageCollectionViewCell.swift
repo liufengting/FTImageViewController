@@ -19,11 +19,10 @@ open class FTImageCollectionViewCell: UICollectionViewCell {
     
     override open func awakeFromNib() {
         super.awakeFromNib()
-//        self.imageScrollView.
+        self.imageScrollView.prepareForReuse()
     }
-
     
-    public func setupWithImageResource(imageResource: FTImageResource) {
+    public func setupWithImageResource(imageResource: FTImageResource?) {
         self.backgroundColor = UIColor.clear
         if self.imageScrollView.superview != nil {
             self.imageScrollView.removeFromSuperview()

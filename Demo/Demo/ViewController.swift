@@ -10,10 +10,10 @@ import UIKit
 import FTImageTransition
 import FTImageViewController
 
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FTImageTransitionDelegate {
+class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FTImageViewControllerDataSource {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    let ftZoomTransition = FTImageTransition()
+//    let ftZoomTransition = FTImageTransition()
 
     let cellMargin : CGFloat = 1.0
     let cellColums : NSInteger = 3
@@ -86,63 +86,41 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     func handleCellTapAtIndexPath(indexPath: IndexPath) {
-        
-        let sender : ImageCollectionViewCell = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
-        let targetRect : CGRect = (sender.contentImageView.image?.rectWithScreenSize())!
 
-        let config = FTZoomTransitionConfig(sourceView: sender,
-                                            image: sender.contentImageView.image,
-                                            targetFrame: targetRect)
-        ftZoomTransition.config = config
-        ftZoomTransition.delegate = self
-        var images: [FTImageResource] = []
-        for (_, value) in self.dataArray.enumerated() {
-            images.append(FTImageResource(image: nil, imageURLString: value))
-        }
-        let ftPageViewController = FTImageViewController(images: images, selectedIndex: indexPath.item)
-        ftPageViewController.transitioningDelegate = ftZoomTransition
-        ftZoomTransition.wirePanDismissToViewController(ftPageViewController)
-        self.present(ftPageViewController, animated: true, completion: {
+        let imageViewController = FTImageViewController()
+//        let sender : ImageCollectionViewCell = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
+//        var images: [FTImageResource] = []
+//        for (_, value) in self.dataArray.enumerated() {
+//            images.append(FTImageResource(image: nil, imageURLString: value))
+//        }
+//        imageViewController.setupWith(images: images, selectedIndex: indexPath.item, sourceView: sender, sourceImage: sender.contentImageView.image)
+        imageViewController.setupWith(dataSource: self, selectedIndex: indexPath.item)
+        self.present(imageViewController, animated: true, completion: {
             
         })
     }
     
+    //    MARK: - FTImageViewControllerDataSource
     
-    //    MARK: - UIViewControllerTransitioningDelegate
-    
-    public func ftImageTransitionWillStartPresent(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
-        print("ftImageTransitionDidStartPresent")
-
-    }
-    
-    public func ftImageTransitionDidFinishPresent(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
-        print("ftImageTransitionDidFinishPresent")
-
+    func numberOfImages(in imageViewController: FTImageViewController) -> Int {
+        return self.dataArray.count
     }
 
-    public func ftImageTransitionWillStartDismiss(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
-        print("ftImageTransitionWillStartDismiss")
-        if let fromVC: FTImageViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as? FTImageViewController {
-            if let cell : ImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: fromVC.currentIndex, section: 0)) as? ImageCollectionViewCell {
-                cell.contentImageView.isHidden = true
-                transition?.config.targetFrame = fromVC.rectForCurrentIndex()
-                transition?.config.sourceFrame = self.collectionView.convert(cell.frame, to: UIApplication.shared.keyWindow)
-                transition?.config.transitionImageView.image = cell.contentImageView.image
-            }
+    func ftImageViewController(imageViewController: FTImageViewController, viewForIndex: NSInteger) -> UIView? {
+        if let sender : ImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: viewForIndex, section: 0)) as? ImageCollectionViewCell {
+            return sender.contentImageView
         }
+        return nil
     }
     
-    public func ftImageTransitionDidCancelDismiss(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
-        print("ftImageTransitionWillStartDismiss")
-    }
-    
-    public func ftImageTransitionDidFinishDismiss(transition: FTImageTransition?, transitionContext: UIViewControllerContextTransitioning) {
-        print("ftImageTransitionDidFinishDismiss")
-        if let fromVC: FTImageViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from)! as? FTImageViewController {
-            if let cell : ImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: fromVC.currentIndex, section: 0)) as? ImageCollectionViewCell {
-                cell.contentImageView.isHidden = false
-            }
+    func ftImageViewController(imageViewController: FTImageViewController, sourceImageForIndex: NSInteger) -> UIImage? {
+        if let sender : ImageCollectionViewCell = collectionView.cellForItem(at: IndexPath(item: sourceImageForIndex, section: 0)) as? ImageCollectionViewCell {
+            return sender.contentImageView.image
         }
+        return nil
     }
-
+    
+    func ftImageViewController(imageViewController: FTImageViewController, imageResourceFor index: NSInteger) -> FTImageResource {
+        return FTImageResource(image: nil, imageURLString: self.dataArray[index])
+    }
 }

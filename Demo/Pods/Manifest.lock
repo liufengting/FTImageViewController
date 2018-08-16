@@ -1,5 +1,5 @@
 PODS:
-  - FTImageTransition (0.0.2)
+  - FTImageTransition (0.0.4)
   - FTImageViewController (0.0.1):
     - FTImageTransition (~> 0.0.1)
     - Kingfisher (~> 4.0)
@@ -19,7 +19,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  FTImageTransition: 91c1a4714eb160c7d01ffc6d1b1f2fbc39fbc756
+  FTImageTransition: e30e6bb1bc57ab7544a51f0e7f0bf9feef2c42f1
   FTImageViewController: 87f113f0aba59e6fc851b18ef54f04014c924277
   Kingfisher: 868c1149679a7ab6869be118faa9b5aed154aaf0
 

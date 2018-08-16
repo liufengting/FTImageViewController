@@ -26,12 +26,5 @@ open class FTImageCollectionView: UICollectionView {
             contentInsetAdjustmentBehavior = .never
         }
     }
-
-//    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if gestureRecognizer.isKind(of: UIPanGestureRecognizer.classForCoder()) && otherGestureRecognizer.isKind(of: UIScreenEdgePanGestureRecognizer.classForCoder()) {
-//            return true
-//        }
-//        return false
-//    }
-
+    
 }
