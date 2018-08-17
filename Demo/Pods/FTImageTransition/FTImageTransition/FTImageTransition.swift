@@ -165,20 +165,17 @@ open class FTImageTransitionPresentAnimator: NSObject, UIViewControllerAnimatedT
         self.config.sourceView?.isHidden = true
         self.config.transitionImageView.frame = config.sourceFrame
         
-        UIView.animateKeyframes(withDuration: transitionDuration(using: transitionContext),
-                                delay: 0,
-                                options: UIViewKeyframeAnimationOptions.calculationModeCubic,
-                                animations: {
-                                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0, animations: {
-                                        self.config.transitionImageView.frame = self.config.targetFrame
-                                        fromVC.view.alpha = 0
-                                    })
-                                    
-                                    UIView.addKeyframe(withRelativeStartTime: 0.95, relativeDuration: 0.05, animations: {
-                                        toVC.view.alpha = 1
-                                    })
-        }, completion: { (completed) -> () in
+        UIView.animate(withDuration: transitionDuration(using: transitionContext),
+                       delay: 0,
+                       usingSpringWithDamping: 0.75,
+                       initialSpringVelocity: 0,
+                       options: UIViewAnimationOptions.curveEaseInOut,
+                       animations: {
+                        self.config.transitionImageView.frame = self.config.targetFrame
+                        fromVC.view.alpha = 0
+        }) { (completed) in
             fromVC.view.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
+            toVC.view.alpha = transitionContext.transitionWasCancelled ? 0.0 : 1.0
             self.config.sourceView?.isHidden = false
             self.config.transitionImageView.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
             self.config.transitionImageView.isHidden = !(transitionContext.transitionWasCancelled)
@@ -188,7 +185,29 @@ open class FTImageTransitionPresentAnimator: NSObject, UIViewControllerAnimatedT
                     self.delegate?.ftImageTransitionDidFinishPresent!(transition: nil, transitionContext: transitionContext)
                 }
             }
-        })
+        }
+        
+//        UIView.animateKeyframes(withDuration: transitionDuration(using: transitionContext),
+//                                delay: 0,
+//                                options: UIViewKeyframeAnimationOptions.calculationModeCubic,
+//                                animations: {
+//                                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0, animations: {
+//                                        self.config.transitionImageView.frame = self.config.targetFrame
+//                                        fromVC.view.alpha = 0
+//                                    })
+//        }, completion: { (completed) -> () in
+//            fromVC.view.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
+//            toVC.view.alpha = transitionContext.transitionWasCancelled ? 0.0 : 1.0
+//            self.config.sourceView?.isHidden = false
+//            self.config.transitionImageView.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
+//            self.config.transitionImageView.isHidden = !(transitionContext.transitionWasCancelled)
+//            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+//            if !(transitionContext.transitionWasCancelled) {
+//                if (self.delegate != nil && (self.delegate!.responds(to: #selector(FTImageTransitionDelegate.ftImageTransitionDidFinishPresent(transition:transitionContext:))))) {
+//                    self.delegate?.ftImageTransitionDidFinishPresent!(transition: nil, transitionContext: transitionContext)
+//                }
+//            }
+//        })
     }
 }
 
@@ -217,8 +236,9 @@ open class FTImageTransitionDismissAnimator: NSObject, UIViewControllerAnimatedT
         
         fromVC.view.frame = container.bounds;
         toVC.view.frame = container.bounds;
+        fromVC.view.alpha = 0.0
         toVC.view.alpha = 0.0
-        
+
         container.addSubview(toVC.view)
         if isEdgePan {
             container.addSubview(fromVC.view)
@@ -230,25 +250,22 @@ open class FTImageTransitionDismissAnimator: NSObject, UIViewControllerAnimatedT
             self.config.transitionImageView.isHidden = false
         }
         self.config.transitionImageView.alpha = 1.0
-        
-        UIView.animateKeyframes(withDuration: transitionDuration(using: transitionContext),
-                                delay: 0,
-                                options: UIViewKeyframeAnimationOptions.calculationModeCubic,
-                                animations:{
-                                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration:  1.0, animations: {
-                                        toVC.view.alpha = 1
-                                        if (!transitionContext.isInteractive) {
-                                            self.config.transitionImageView.frame = self.config.sourceFrame
-                                        }
-                                    })
-                                    if !self.isEdgePan {
-                                        UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.05, animations: {
-                                            fromVC.view.alpha = 0
-                                        })
-                                    }
-        }, completion: { (completed) -> () in
+        UIView.animate(withDuration: transitionDuration(using: transitionContext),
+                       delay: 0,
+                       usingSpringWithDamping: 0.75,
+                       initialSpringVelocity: 0,
+                       options: UIViewAnimationOptions.curveEaseInOut,
+                       animations: {
+                        toVC.view.alpha = 1
+                        if (!transitionContext.isInteractive) {
+                            self.config.transitionImageView.frame = self.config.sourceFrame
+                        }
+        }) { (completed) in
             if (transitionContext.transitionWasCancelled == true){
                 container.bringSubview(toFront: fromVC.view)
+            }
+            if !self.isEdgePan {
+                fromVC.view.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
             }
             self.config.transitionImageView.isHidden = transitionContext.transitionWasCancelled
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
@@ -263,7 +280,39 @@ open class FTImageTransitionDismissAnimator: NSObject, UIViewControllerAnimatedT
                     }
                 }
             }
-        })
+        }
+//        UIView.animateKeyframes(withDuration: transitionDuration(using: transitionContext),
+//                                delay: 0,
+//                                options: UIViewKeyframeAnimationOptions.calculationModeCubic,
+//                                animations:{
+//                                    UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration:  1.0, animations: {
+//                                        toVC.view.alpha = 1
+//                                        if (!transitionContext.isInteractive) {
+//                                            self.config.transitionImageView.frame = self.config.sourceFrame
+//                                        }
+//                                    })
+//
+//        }, completion: { (completed) -> () in
+//            if (transitionContext.transitionWasCancelled == true){
+//                container.bringSubview(toFront: fromVC.view)
+//            }
+//            if !self.isEdgePan {
+//                fromVC.view.alpha = transitionContext.transitionWasCancelled ? 1.0 : 0.0
+//            }
+//            self.config.transitionImageView.isHidden = transitionContext.transitionWasCancelled
+//            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+//            if (!self.isEdgePan) {
+//                if (transitionContext.transitionWasCancelled) {
+//                    if (self.delegate != nil && (self.delegate!.responds(to: #selector(FTImageTransitionDelegate.ftImageTransitionDidCancelDismiss(transition:transitionContext:))))) {
+//                        self.delegate?.ftImageTransitionDidCancelDismiss!(transition: nil, transitionContext: transitionContext)
+//                    }
+//                } else {
+//                    if (self.delegate != nil && (self.delegate!.responds(to: #selector(FTImageTransitionDelegate.ftImageTransitionDidFinishDismiss(transition:transitionContext:))))) {
+//                        self.delegate?.ftImageTransitionDidFinishDismiss!(transition: nil, transitionContext: transitionContext)
+//                    }
+//                }
+//            }
+//        })
     }
 }
 
@@ -356,15 +405,13 @@ open class FTImageTransitionPanDismissAnimator : UIPercentDrivenInteractiveTrans
     
     public func handleDismissBegin() {
         interactionInProgress = true
-        //        viewController?.view.isHidden = true
         viewController?.dismiss(animated: true, completion: nil)
     }
     
     public func handleDismissProgress(progress: CGFloat, translation: CGPoint) {
         shouldCompleteTransition = (fabsf(Float(progress)) > 0.2)
-        //        viewController?.view.isHidden = true
         self.updateTargetViewFrame(progress, translation: translation)
-        update(CGFloat(fabsf(Float(min(progress*3.0, 1.0)))))
+        update(CGFloat(fabsf(Float(max(0.1, min(progress*3.0, 1.0))))))
     }
     
     public func handleDismissCancel() {
