@@ -86,14 +86,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     func handleCellTapAtIndexPath(indexPath: IndexPath) {
-
         let imageViewController = FTImageViewController()
-//        let sender : ImageCollectionViewCell = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
-//        var images: [FTImageResource] = []
-//        for (_, value) in self.dataArray.enumerated() {
-//            images.append(FTImageResource(image: nil, imageURLString: value))
-//        }
-//        imageViewController.setupWith(images: images, selectedIndex: indexPath.item, sourceView: sender, sourceImage: sender.contentImageView.image)
         imageViewController.setupWith(dataSource: self, selectedIndex: indexPath.item)
         self.present(imageViewController, animated: true, completion: {
             
