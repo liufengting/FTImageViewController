@@ -73,6 +73,9 @@ open class FTImageViewController: UIViewController {
     public lazy var collectionView: FTImageCollectionView = {
         let cv = FTImageCollectionView(frame: self.view.bounds, collectionViewLayout: self.flowLayout)
         cv.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 11.0, *) {
+            cv.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.never
+        }
         cv.register(FTImageCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: FTImageCollectionViewCell.identifier)
         cv.delegate = self
         cv.dataSource = self

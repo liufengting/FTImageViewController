@@ -252,7 +252,7 @@ open class FTImageTransitionDismissAnimator: NSObject, UIViewControllerAnimatedT
         self.config.transitionImageView.alpha = 1.0
         UIView.animate(withDuration: transitionDuration(using: transitionContext),
                        delay: 0,
-                       usingSpringWithDamping: 0.75,
+                       usingSpringWithDamping: 0.85,
                        initialSpringVelocity: 0,
                        options: UIViewAnimationOptions.curveEaseInOut,
                        animations: {
@@ -411,7 +411,7 @@ open class FTImageTransitionPanDismissAnimator : UIPercentDrivenInteractiveTrans
     public func handleDismissProgress(progress: CGFloat, translation: CGPoint) {
         shouldCompleteTransition = (fabsf(Float(progress)) > 0.2)
         self.updateTargetViewFrame(progress, translation: translation)
-        update(CGFloat(fabsf(Float(max(0.1, min(progress*3.0, 1.0))))))
+        update(CGFloat(fabsf(Float(max(0.2, min(progress*2.0, 1.0))))))
     }
     
     public func handleDismissCancel() {

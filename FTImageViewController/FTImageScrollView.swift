@@ -78,7 +78,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
         self.decelerationRate = UIScrollViewDecelerationRateFast
-        self.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
+//        self.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         self.minimumZoomScale = 1.0
         self.maximumZoomScale = 3.0
         self.isScrollEnabled = true
