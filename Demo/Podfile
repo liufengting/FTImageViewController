@@ -5,6 +5,7 @@ target 'Demo' do
   use_frameworks!
 
   pod 'FTImageViewController', :path => '../'
-  pod 'FTImageTransition'
+#  pod 'FTImageTransition'
+#  pod 'Kingfisher', '~> 4.0'
 
 end

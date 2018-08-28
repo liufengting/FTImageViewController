@@ -75,10 +75,9 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         if #available(iOS 11.0, *) {
             self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.never
         }
+        self.decelerationRate = UIScrollViewDecelerationRateNormal
         self.showsHorizontalScrollIndicator = false
         self.showsVerticalScrollIndicator = false
-        self.decelerationRate = UIScrollViewDecelerationRateFast
-//        self.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         self.minimumZoomScale = 1.0
         self.maximumZoomScale = 3.0
         self.isScrollEnabled = true
@@ -144,21 +143,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView?{
         return imageView
     }
-        
-    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat){
-//        let ws = scrollView.frame.size.width - scrollView.contentInset.left - scrollView.contentInset.right
-//        let hs = scrollView.frame.size.height - scrollView.contentInset.top - scrollView.contentInset.bottom
-//        let w = imageView.frame.size.width
-//        let h = imageView.frame.size.height
-//        var rct = imageView.frame
-//        rct.origin.x = (ws > w) ? (ws-w)/2 : 0
-//        rct.origin.y = (hs > h) ? (hs-h)/2 : 0
-//        imageView.frame = rct;
-        let offsetX = (scrollView.frame.size.width > scrollView.contentSize.width) ? (scrollView.frame.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
-        let offsetY = (scrollView.frame.size.height > scrollView.contentSize.height) ? (scrollView.frame.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
-        self.imageView.center = CGPoint(x: scrollView.contentSize.width * 0.5 + offsetX, y:scrollView.contentSize.height * 0.5 + offsetY);
-    }
-    
+
     //    MARK: - handleSingleTap
     
     @objc func handleSingleTap(sender: UITapGestureRecognizer){
@@ -169,30 +154,26 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
     
     @objc func handleDoubleTap(sender: UITapGestureRecognizer){
         let touchPoint = sender.location(in: self.imageView)
-//        if (self.zoomScale == self.maximumZoomScale){
-//            self.setZoomScale(self.minimumZoomScale, animated: true)
-//            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(imageScrollView:))))!) {
-//                self.tapDelegate?.ftImageScrollViewDidZoomIn!(ftImageScrollView: self)
-//            }
-//        }else{
-//            self.zoom(to: CGRect(x: touchPoint.x, y: touchPoint.y, width: 1, height: 1), animated: true)
-//            if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(imageScrollView:))))!) {
-//                self.tapDelegate?.ftImageScrollViewDidZoomOut!(ftImageScrollView: self)
-//            }
-//        }
         if (self.zoomScale > self.minimumZoomScale) {
             self.setZoomScale(self.minimumZoomScale, animated: true)
             if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomIn(imageScrollView:at:))))!) {
                 self.tapDelegate?.ftImageScrollViewDidZoomIn!(imageScrollView: self, at: self.minimumZoomScale)
             }
         } else {
-            let width = self.frame.size.width / self.maximumZoomScale;
-            let height = self.frame.size.height / self.maximumZoomScale;
-            self.zoom(to: CGRect(x: touchPoint.x - width/2, y: touchPoint.y - height/2, width:  width, height: height), animated: true)
+            let zoomRect = zoomRectForScrollViewWith(maximumZoomScale, touchPoint: touchPoint)
+            zoom(to: zoomRect, animated: true)
             if (self.tapDelegate != nil && (self.tapDelegate?.responds(to: #selector(FTImageScrollViewDelegate.ftImageScrollViewDidZoomOut(imageScrollView:at:))))!) {
                 self.tapDelegate?.ftImageScrollViewDidZoomOut!(imageScrollView: self, at: self.maximumZoomScale)
             }
         }
+    }
+
+    func zoomRectForScrollViewWith(_ scale: CGFloat, touchPoint: CGPoint) -> CGRect {
+        let w = frame.size.width / scale
+        let h = frame.size.height / scale
+        let x = touchPoint.x - (h / max(UIScreen.main.scale, 2.0))
+        let y = touchPoint.y - (w / max(UIScreen.main.scale, 2.0))
+        return CGRect(x: x, y: y, width: w, height: h)
     }
     
 }
