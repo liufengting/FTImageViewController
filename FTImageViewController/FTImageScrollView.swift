@@ -30,7 +30,7 @@ public struct FTImageResource : FTImageResourceProtocol {
     @objc optional func ftImageScrollViewDidZoomIn(imageScrollView: FTImageScrollView, at scale: CGFloat)
 }
 
-public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
+open class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
 
     open weak var tapDelegate: FTImageScrollViewDelegate?
     open lazy var imageView: UIImageView = {
@@ -81,6 +81,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.minimumZoomScale = 1.0
         self.maximumZoomScale = 3.0
         self.isScrollEnabled = true
+        self.bounces = false
         self.delegate = self
         self.setupGestures()
     }
@@ -91,7 +92,7 @@ public class FTImageScrollView: UIScrollView, UIScrollViewDelegate {
         self.addGestureRecognizer(doubleTapGesture)
     }
     
-    public override func setNeedsLayout() {
+    open override func setNeedsLayout() {
         super.setNeedsLayout()
         self.activityIndicator.frame = CGRect(x: frame.width/2.0, y: frame.height/2.0, width: 40.0, height: 40.0);
     }

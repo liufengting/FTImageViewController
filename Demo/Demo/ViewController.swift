@@ -21,7 +21,6 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         return (UIScreen.main.bounds.size.width - self.cellMargin * CGFloat(self.cellColums - 1))/CGFloat(self.cellColums);
     }()
     
-    
     var dataArray : [String] = ["https://ws1.sinaimg.cn/mw600/a2e93f36gy1fto9w7lofsj20v80sgtdi.jpg",
                                 "https://ws3.sinaimg.cn/mw600/e0e4ecc3gy1fto9n5r93rj20gt0p10vw.jpg",
                                 "https://wx2.sinaimg.cn/mw600/006mYqTmly4ftrrukfzofj30es0kyq4o.jpg",
