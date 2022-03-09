@@ -73,8 +73,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell : ImageCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ImageCollectionViewCell.classForCoder())",
-                                for: indexPath) as! ImageCollectionViewCell
+        let cell : ImageCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ImageCollectionViewCell.classForCoder())", for: indexPath) as! ImageCollectionViewCell
         cell.setupWithImageUrl(imageUrl: self.dataArray[indexPath.row])
         return cell
     }
